@@ -8,9 +8,7 @@ This file_column plugin is based on the work done by Sebastian Kanthak. Refer to
 for the original file_column plugin.
 The following changes have been done in this version:
 
- * In the original, all files were stored into one single folder per column. This would result in maxing out the limit of the
-  number of sub-directories within a directory. This version addresses this problem by breaking up the sub-directories such
-	that there will never be more than 101 sub-directories directly with a directory.
+ * In the original, all files were stored into one single folder per column. This would result in maxing out the limit of the number of sub-directories within a directory. This version addresses this problem by breaking up the sub-directories such that there will never be more than 101 sub-directories directly with a directory.
  * Adds features to simplify integration with S3 to allow files to be moved/copied onto S3 in real time or in a batch mode.
 
 FEATURES
