@@ -1,0 +1,6 @@
+.svn
+*.bak
+*.tmp
+log
+uploads
+tp

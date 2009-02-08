@@ -1,0 +1,82 @@
+Author
+======
+Modifications by Nikhil Gupte on top of original work done by Sebastian Kanthak.
+
+Introduction
+============
+This file_column plugin is based on the work done by Sebastian Kanthak. Refer to http://www.kanthak.net/opensource/file_column/
+for the original file_column plugin.
+The following changes have been done in this version:
+* In the original, all files were stored into one single folder per column. This would result in maxing out the limit of the
+  number of sub-directories within a directory. This version addresses this problem by breaking up the sub-directories such
+	that there will never be more than 101 sub-directories directly with a directory.
+* Adds features to simplify integration with S3 to allow files to be moved/copied onto S3 in real time or in a batch mode.
+
+FEATURES
+========
+Let's assume an model class named Entry, where we want to define the "image" column
+as a "file_upload" column.
+
+class Entry < ActiveRecord::Base
+  file_column :image
+end
+
+* every entry can have one uploaded file, the filename will be stored in the "image" column
+
+* if the entry's id is 123, files will be stored in "public/entry/image/01/23/N123/TIMESTAMP.ext"
+
+* Newly uploaded files will be stored in "public/entry/tmp/<random>/TIMESTAMP.ext" so that
+  they can be reused in form redisplays (due to validation etc.)
+
+* in a view, "<%= file_column_field 'entry', 'image' %> will create a file upload field as well
+  as a hidden field to recover files uploaded before in a case of a form redisplay
+
+* in a view, "<%= url_for_file_column 'entry', 'image' %> will create an URL to access the
+  uploaded file. Note that you need an Entry object in the instance variable @entry for this
+  to work.
+
+* easy integration with RMagick to resize images and/or create thumb-nails.
+
+* easy integration with Amazon's S3 and CloudFront service.
+
+S3 Integration
+==============
+All files are first uploaded onto the file system, resized depending on the options provided, and finally moved (or copied) to S3.
+S3 integration is of two types: automatically move uploaded files to S3 once uploaded or move/copy the files using automatically generated
+class methods in a batch mode.
+
+To integrate with S3, add a boolean column <attribute>_in_s3 to your model's table. For example: image_in_s3.
+This additional column is used to trac which files are present in S3 and which are on your local files system. When a file is uploaded
+the <attribute>_in_s3 is set to false. When that file is moved or copied onto S3, <attribute>_in_s3 changed to true.
+
+class Entry < ActiveRecord::Base
+  file_column :image, :s3 => true, :s3_auto => :move
+end
+
+Options:
+* s3 => true - If set, will add the following methods:
+* s3_auto => [:move | :copy] - Optional parameter which can be set to either of :move or :copy to automatically move/copy the uploaded files onto S3.
+
+The following Class methods are added to the class if the option :s3 => true is provided:
+* Entry.move_all_images_to_s3(options => {}) where options are the same as those used by regular finders
+* Entry.copy_all_images_to_s3(options => {}) where options are the same as those used by regular finders
+
+The following Instance methods are added if the option :s3 => true is provided:
+* @entry.move_image_to_s3
+* @entry.copy_image_to_s3
+
+USAGE
+=====
+Just drop the whole directory into your application's "vendor/plugins" directory. Starting
+with version 1.0rc of rails, it will be automatically picked for you by rails plugin
+mechanism.
+
+DOCUMENTATION
+=============
+Please look at the rdoc-generated documentation in the "doc" directory.
+rectory "test"
+
+BUGS & FEEDBACK
+===============
+Bug reports (as well as patches) and feedback are very welcome. Please send it to
+nikhilgupte_AT_gmail_DOT_com
