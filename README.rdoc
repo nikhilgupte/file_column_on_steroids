@@ -1,9 +1,7 @@
-Author
-======
+= Author
 Modifications by Nikhil Gupte on top of original work done by Sebastian Kanthak.
 
-Introduction
-============
+= Introduction
 This file_column plugin is based on the work done by Sebastian Kanthak. Refer to http://www.kanthak.net/opensource/file_column/
 for the original file_column plugin.
 The following changes have been done in this version:
