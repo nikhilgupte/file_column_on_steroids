@@ -5,8 +5,10 @@ Modifications by Nikhil Gupte on top of original work done by Sebastian Kanthak.
 This file_column plugin is based on the work done by Sebastian Kanthak. Refer to http://www.kanthak.net/opensource/file_column/
 for the original file_column plugin.
 The following changes have been done in this version:
+ * In the original, all files were stored into one single folder per column. This would result in maxing out the limit
+   of the number of sub-directories within a directory. This version addresses this problem by breaking up the
+	 sub-directories such that there will never be more than 101 sub-directories directly with a directory.
 
- * In the original, all files were stored into one single folder per column. This would result in maxing out the limit of the number of sub-directories within a directory. This version addresses this problem by breaking up the sub-directories such that there will never be more than 101 sub-directories directly with a directory.
  * Adds features to simplify integration with S3 to allow files to be moved/copied onto S3 in real time or in a batch mode.
 
 FEATURES
@@ -18,23 +20,23 @@ class Entry < ActiveRecord::Base
   file_column :image
 end
 
-* every entry can have one uploaded file, the filename will be stored in the "image" column
+ * every entry can have one uploaded file, the filename will be stored in the "image" column
 
-* if the entry's id is 123, files will be stored in "public/entry/image/01/23/N123/TIMESTAMP.ext"
+ * if the entry's id is 123, files will be stored in "public/entry/image/01/23/N123/TIMESTAMP.ext"
 
-* Newly uploaded files will be stored in "public/entry/tmp/<random>/TIMESTAMP.ext" so that
+ * Newly uploaded files will be stored in "public/entry/tmp/<random>/TIMESTAMP.ext" so that
   they can be reused in form redisplays (due to validation etc.)
 
-* in a view, "<%= file_column_field 'entry', 'image' %> will create a file upload field as well
+ * in a view, "<%= file_column_field 'entry', 'image' %> will create a file upload field as well
   as a hidden field to recover files uploaded before in a case of a form redisplay
 
-* in a view, "<%= url_for_file_column 'entry', 'image' %> will create an URL to access the
+ * in a view, "<%= url_for_file_column 'entry', 'image' %> will create an URL to access the
   uploaded file. Note that you need an Entry object in the instance variable @entry for this
   to work.
 
-* easy integration with RMagick to resize images and/or create thumb-nails.
+ * easy integration with RMagick to resize images and/or create thumb-nails.
 
-* easy integration with Amazon's S3 and CloudFront service.
+ * easy integration with Amazon's S3 and CloudFront service.
 
 S3 Integration
 ==============
