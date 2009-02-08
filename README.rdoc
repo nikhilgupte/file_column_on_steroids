@@ -41,7 +41,17 @@ the <attribute>_in_s3 is set to false. When that file is moved or copied onto S3
    file_column :image, :s3 => true, :s3_auto => :move
  end
 
-== Options:
+== Setup
+
+1. Install the right_aws gem
+2. Register with Amazon Web Services (S3 and optionally CloudFront)
+3. Enter the following config variables in your environment.rb file:
+	FileColumn::S3FileColumnExtension::Config.s3_access_key_id = YOUR_S3_ACCESS_KEY
+	FileColumn::S3FileColumnExtension::Config.s3_secret_access_key = YOUR_S3_SECRET
+	FileColumn::S3FileColumnExtension::Config.s3_bucket_name = THE_BUCKET_WHERE_THE_UPLOADED_FILE_SHOULD_BE_STORED
+	FileColumn::S3FileColumnExtension::Config.s3_distribution_url = THE_S3_OR_CLOUD_FRONT_URL_OF_YOUR_BUCKET
+
+== Options
 
 * s3 => true - If set, will add the following methods:
 * s3_auto => [:move | :copy] - Optional parameter which can be set to either of :move or :copy to automatically move/copy the uploaded files onto S3.
