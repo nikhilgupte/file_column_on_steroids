@@ -116,16 +116,6 @@ module FileColumn # :nodoc:
         end
         after_save after_save_method_s3
 
-        after_destroy_method_s3 = "#{attr}_after_destroy_s3".to_sym
-        define_method after_destroy_method_s3 do
-          if send("#{attr}_in_s3")
-            key = send("#{attr}_web_folder_path")
-            PendingDeletion.create!(:key => key) unless PendingDeletion.find_by_key(key)
-          end
-          true
-        end
-        after_destroy after_destroy_method_s3
-
       end
 
       def _upload_to_s3(key, file_path)
