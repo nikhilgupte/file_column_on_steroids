@@ -28,6 +28,7 @@ as a "file_upload" column.
 * easy integration with Amazon's S3 and CloudFront service.
 * if the move/copy to S3 fails, falls-back on the file system for storage
 * bulk batch-mode move/copy to S3 operations 
+* generated dynamic filenames thus avoiding cache expiration issues when using Amazon CloudFront
 
 = S3 Integration
 
