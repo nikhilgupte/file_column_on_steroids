@@ -26,6 +26,8 @@ as a "file_upload" column.
 * in a view, "<%= url_for_file_column 'entry', 'image' %> will create an URL to access the uploaded file. Note that you need an Entry object in the instance variable @entry for this to work.  
 * easy integration with RMagick to resize images and/or create thumb-nails.
 * easy integration with Amazon's S3 and CloudFront service.
+* if the move/copy to S3 fails, falls-back on the file system for storage
+* bulk batch-mode move/copy to S3 operations 
 
 = S3 Integration
 
@@ -54,12 +56,14 @@ the <attribute>_in_s3 is set to false. When that file is moved or copied onto S3
 == Options
 
 * s3 => true - If set, will add the following methods:
-* s3_auto => [:move | :copy] - Optional parameter which can be set to either of :move or :copy to automatically move/copy the uploaded files onto S3.
+* s3_auto => [:move | :copy] - Optional parameter which can be set to either of :move or :copy to automatically move/copy the uploaded files onto S3. If not specified, the files will remain on the file system till they are moved using one of the batch upload methods (described below).
 
+== Class Methods
 The following Class methods are added to the class if the option :s3 => true is provided:
 * Entry.move_all_images_to_s3(options => {}) where options are the same as those used by regular finders
 * Entry.copy_all_images_to_s3(options => {}) where options are the same as those used by regular finders
 
+== Instance Methods
 The following Instance methods are added if the option :s3 => true is provided:
 * @entry.move_image_to_s3
 * @entry.copy_image_to_s3
